@@ -1,9 +1,10 @@
-# coding: utf-8
 
-from the_tale.game.heroes.habilities.prototypes import AbilityPrototype
-from the_tale.game.heroes.habilities.relations import ABILITY_TYPE, ABILITY_ACTIVATION_TYPE
+import smart_imports
 
-class AbilityModifiersBase(AbilityPrototype):
+smart_imports.all()
+
+
+class AbilityModifiersBase(prototypes.AbilityPrototype):
 
     INCOMING_MAGIC_DAMAGE_MODIFIER = [1, 1, 1, 1, 1]
     INCOMING_PHYSIC_DAMAGE_MODIFIER = [1, 1, 1, 1, 1]
@@ -30,8 +31,8 @@ class AbilityModifiersBase(AbilityPrototype):
 
 class MAGE(AbilityModifiersBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
 
     NAME = 'Маг'
     normalized_name = NAME
@@ -46,8 +47,8 @@ class MAGE(AbilityModifiersBase):
 
 class WARRIOR(AbilityModifiersBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
 
     NAME = 'Воин'
     normalized_name = NAME
@@ -62,8 +63,8 @@ class WARRIOR(AbilityModifiersBase):
 
 class GARGOYLE(AbilityModifiersBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
 
     NAME = 'Горгулья'
     normalized_name = NAME
@@ -75,8 +76,8 @@ class GARGOYLE(AbilityModifiersBase):
 
 class KILLER(AbilityModifiersBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
 
     NAME = 'Убийца'
     normalized_name = NAME

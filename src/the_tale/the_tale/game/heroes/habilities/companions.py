@@ -1,22 +1,13 @@
 
-from tt_logic.beings import relations as beings_relations
+import smart_imports
 
-from the_tale.game.companions.abilities import relations as companions_abilities_relations
-
-from the_tale.game.balance import constants as c
-
-from the_tale.game import relations as game_relations
-
-from the_tale.game.heroes import relations as heroes_relations
-
-from the_tale.game.heroes.habilities.prototypes import AbilityPrototype
-from the_tale.game.heroes.habilities.relations import ABILITY_TYPE, ABILITY_ACTIVATION_TYPE, ABILITY_AVAILABILITY
+smart_imports.all()
 
 
-class _CompanionAbilityModifier(AbilityPrototype):
-    TYPE = ABILITY_TYPE.COMPANION
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+class _CompanionAbilityModifier(prototypes.AbilityPrototype):
+    TYPE = relations.ABILITY_TYPE.COMPANION
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = None
     normalized_name = None
@@ -58,11 +49,11 @@ class IMPROVISER(_CompanionAbilityModifier):
     EFFECT_TYPE = companions_abilities_relations.METATYPE.OTHER
 
 
-class THOUGHTFUL(AbilityPrototype):
+class THOUGHTFUL(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.COMPANION
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.COMPANION
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Заботливый'
     normalized_name = NAME
@@ -76,11 +67,11 @@ class THOUGHTFUL(AbilityPrototype):
     def modify_attribute(self, type_, value): return value * self.multiplier if type_.is_COMPANION_MAX_HEALTH else value
 
 
-class COHERENCE(AbilityPrototype):
+class COHERENCE(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.COMPANION
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.COMPANION
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Товарищ'
     normalized_name = NAME
@@ -95,10 +86,10 @@ class COHERENCE(AbilityPrototype):
 
 
 
-class _CompanionHealBase(AbilityPrototype):
-    TYPE = ABILITY_TYPE.COMPANION
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+class _CompanionHealBase(prototypes.AbilityPrototype):
+    TYPE = relations.ABILITY_TYPE.COMPANION
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = None
     normalized_name = None
@@ -145,10 +136,10 @@ class WITCHCRAFT(_CompanionHealBase):
     DESCRIPTION = 'Герой, сведущий в нетрадиционных областях знаний, иногда может восстановить здоровье особого (%s) спутника.' % ', '.join(BEING_TYPES)
 
 
-class _CompanionCoherenceSpeedBase(AbilityPrototype):
-    TYPE = ABILITY_TYPE.COMPANION
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+class _CompanionCoherenceSpeedBase(prototypes.AbilityPrototype):
+    TYPE = relations.ABILITY_TYPE.COMPANION
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = None
     normalized_name = None
@@ -189,6 +180,8 @@ class SACREDNESS(_CompanionCoherenceSpeedBase):
 
 
 
-ABILITIES = dict( (ability.get_id(), ability)
+ABILITIES = dict((ability.get_id(), ability)
                   for ability in globals().values()
-                  if isinstance(ability, type) and issubclass(ability, AbilityPrototype) and ability != AbilityPrototype and not ability.__name__.startswith('_'))
+                  if (isinstance(ability, type) and
+                      issubclass(ability, prototypes.AbilityPrototype) and
+                      ability != prototypes.AbilityPrototype and not ability.__name__.startswith('_')))

@@ -1,19 +1,7 @@
 
-import math
+import smart_imports
 
-from the_tale.common.utils import logic as utils_logic
-
-from the_tale.game import tt_api_energy
-
-from the_tale.game.balance import formulas as f
-from the_tale.game.balance import constants as c
-
-from the_tale.game.persons import storage as persons_storage
-from the_tale.game.places import storage as places_storage
-
-from the_tale.game.artifacts import relations as artifacts_relations
-
-from . import relations
+smart_imports.all()
 
 
 class JobsMethodsMixin(object):

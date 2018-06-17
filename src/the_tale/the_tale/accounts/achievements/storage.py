@@ -1,4 +1,4 @@
-# coding: utf-8
+
 import contextlib
 import collections
 
@@ -66,3 +66,7 @@ class AchievementsStorage(storage.Storage):
 
 
 achievements_storage = AchievementsStorage()
+
+
+def verify(*argv, **kwargs):
+    return achievements_storage.verify(*argv, **kwargs)

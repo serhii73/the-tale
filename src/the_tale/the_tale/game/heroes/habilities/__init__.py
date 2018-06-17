@@ -1,24 +1,20 @@
 
-import random
+import smart_imports
 
-from the_tale.game.balance import constants as c, formulas as f
-
-from the_tale.game.heroes.habilities.relations import ABILITY_TYPE, ABILITY_AVAILABILITY, ABILITY_ACTIVATION_TYPE, ABILITY_LOGIC_TYPE
-from the_tale.game.heroes.habilities.battle import ABILITIES as BATTLE_ABILITIES
-from the_tale.game.heroes.habilities.attributes import ABILITIES as ATTRIBUTES_ABILITIES
-from the_tale.game.heroes.habilities.modifiers import ABILITIES as MODIFIERS_ABILITIES
-from the_tale.game.heroes.habilities.nonbattle import ABILITIES as NONBATTLE_ABILITIES
-from the_tale.game.heroes.habilities.companions import ABILITIES as COMPANIONS_ABILITIES
+smart_imports.all()
 
 
-ABILITIES = dict(**BATTLE_ABILITIES)
-ABILITIES.update(**ATTRIBUTES_ABILITIES)
-ABILITIES.update(**MODIFIERS_ABILITIES)
-ABILITIES.update(**NONBATTLE_ABILITIES)
-ABILITIES.update(**COMPANIONS_ABILITIES)
+ABILITY_TYPE = relations.ABILITY_TYPE
+ABILITY_AVAILABILITY = relations.ABILITY_AVAILABILITY
+ABILITY_ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE
+ABILITY_LOGIC_TYPE = relations.ABILITY_LOGIC_TYPE
 
 
-__all__ = ['ABILITIES', 'ABILITY_LOGIC_TYPE', 'ABILITY_TYPE', 'ABILITY_AVAILABILITY', 'ABILITY_ACTIVATION_TYPE']
+ABILITIES = dict(**battle.ABILITIES)
+ABILITIES.update(**attributes.ABILITIES)
+ABILITIES.update(**modifiers.ABILITIES)
+ABILITIES.update(**nonbattle.ABILITIES)
+ABILITIES.update(**companions.ABILITIES)
 
 
 class AbilitiesPrototype(object):

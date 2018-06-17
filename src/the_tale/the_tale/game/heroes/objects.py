@@ -1,33 +1,7 @@
 
-import time
-import random
+import smart_imports
 
-from dext.common.utils import cache
-
-from the_tale import amqp_environment
-
-from the_tale.accounts import logic as accounts_logic
-from the_tale.accounts.personal_messages import tt_api as pm_tt_api
-
-from the_tale.common.utils.logic import random_value_by_priority
-
-from the_tale.game import names
-from the_tale.game.places import storage as places_storage
-
-from the_tale.game.balance import constants as c
-
-from the_tale.game import turn
-from the_tale.game.prototypes import GameState
-from the_tale.game import relations as game_relations
-
-from . import tt_api
-from . import relations
-from . import messages
-from . import exceptions
-from . import conf
-from . import logic_accessors
-from . import equipment_methods
-from . import jobs_methods
+smart_imports.all()
 
 
 # TODO: merge classes instead subclassing
@@ -289,7 +263,7 @@ class Hero(logic_accessors.LogicAccessorsMixin,
         if self.companion is None or self.companion_heal_disabled():
             spending_candidates[relations.ITEMS_OF_EXPENDITURE.HEAL_COMPANION] = 0
 
-        self.next_spending = random_value_by_priority(list(spending_candidates.items()))
+        self.next_spending = utils_logic.random_value_by_priority(list(spending_candidates.items()))
         self.quests.mark_updated()
 
 
@@ -611,7 +585,7 @@ class Hero(logic_accessors.LogicAccessorsMixin,
     def cached_ui_info_for_hero(cls, account_id, recache_if_required, patch_turns, for_last_turn):
         from . import logic
 
-        data = cache.get(cls.cached_ui_info_key_for_hero(account_id))
+        data = dext_cache.get(cls.cached_ui_info_key_for_hero(account_id))
 
         if data is None:
             hero = logic.load_hero(account_id=account_id)
@@ -619,7 +593,7 @@ class Hero(logic_accessors.LogicAccessorsMixin,
 
         cls.modify_ui_info_with_turn(data, for_last_turn=for_last_turn)
 
-        if recache_if_required and cls.is_ui_continue_caching_required(data['ui_caching_started_at']) and GameState.is_working():
+        if recache_if_required and cls.is_ui_continue_caching_required(data['ui_caching_started_at']) and game_prototypes.GameState.is_working():
             amqp_environment.environment.workers.supervisor.cmd_start_hero_caching(account_id)
 
         if patch_turns is not None and data['patch_turn'] in patch_turns:

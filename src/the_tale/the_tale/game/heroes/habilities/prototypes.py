@@ -1,6 +1,7 @@
-#coding: utf-8
 
-from the_tale.game.heroes.habilities import relations
+import smart_imports
+
+smart_imports.all()
 
 
 class AbilityPrototype(object):

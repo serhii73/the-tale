@@ -122,3 +122,7 @@ class RestrictionsStorage(dext_storage.Storage):
 
 
 restrictions_storage = RestrictionsStorage()
+
+
+def get_restriction(*argv, **kwargs):
+    return restrictions_storage.get_restriction(*argv, **kwargs)

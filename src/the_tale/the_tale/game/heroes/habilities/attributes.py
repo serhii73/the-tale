@@ -1,10 +1,10 @@
-# coding: utf-8
 
-from the_tale.game.heroes.habilities.prototypes import AbilityPrototype
-from the_tale.game.heroes.habilities.relations import ABILITY_TYPE, ABILITY_ACTIVATION_TYPE, ABILITY_AVAILABILITY
+import smart_imports
+
+smart_imports.all()
 
 
-class AbilityAttributeBase(AbilityPrototype):
+class AbilityAttributeBase(prototypes.AbilityPrototype):
 
     @property
     def modifier(self):
@@ -17,9 +17,9 @@ class AbilityAttributeBase(AbilityPrototype):
 
 class EXTRA_SLOW(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Неповоротливый'
     normalized_name = NAME
@@ -32,9 +32,9 @@ class EXTRA_SLOW(AbilityAttributeBase):
 
 class SLOW(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Медленный'
     normalized_name = NAME
@@ -47,9 +47,9 @@ class SLOW(AbilityAttributeBase):
 
 class FAST(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_ALL
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_ALL
 
     NAME = 'Быстрый'
     normalized_name = NAME
@@ -62,9 +62,9 @@ class FAST(AbilityAttributeBase):
 
 class EXTRA_FAST(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Быстрее ветра'
     normalized_name = NAME
@@ -81,9 +81,9 @@ class EXTRA_FAST(AbilityAttributeBase):
 
 class EXTRA_THIN(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Кожа да кости'
     normalized_name = NAME
@@ -96,9 +96,9 @@ class EXTRA_THIN(AbilityAttributeBase):
 
 class THIN(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Худой'
     normalized_name = NAME
@@ -111,9 +111,9 @@ class THIN(AbilityAttributeBase):
 
 class THICK(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_ALL
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_ALL
 
     NAME = 'Здоровяк'
     normalized_name = NAME
@@ -126,9 +126,9 @@ class THICK(AbilityAttributeBase):
 
 class EXTRA_THICK(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Толстяк'
     normalized_name = NAME
@@ -145,9 +145,9 @@ class EXTRA_THICK(AbilityAttributeBase):
 
 class EXTRA_WEAK(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Тростинка'
     normalized_name = NAME
@@ -160,9 +160,9 @@ class EXTRA_WEAK(AbilityAttributeBase):
 
 class WEAK(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Слабый'
     normalized_name = NAME
@@ -175,9 +175,9 @@ class WEAK(AbilityAttributeBase):
 
 class STRONG(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_ALL
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_ALL
 
     NAME = 'Боец'
     normalized_name = NAME
@@ -190,9 +190,9 @@ class STRONG(AbilityAttributeBase):
 
 class EXTRA_STRONG(AbilityAttributeBase):
 
-    TYPE = ABILITY_TYPE.BATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_MONSTERS
+    TYPE = relations.ABILITY_TYPE.BATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_MONSTERS
 
     NAME = 'Громила'
     normalized_name = NAME

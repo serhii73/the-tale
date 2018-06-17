@@ -1,25 +1,7 @@
 
-import datetime
+import smart_imports
 
-import rels
-
-from django.db import models as django_models
-
-from the_tale.common.utils.prototypes import BasePrototype
-
-from the_tale.game.mobs import objects as mobs_objects
-from the_tale.game.mobs import storage as mobs_storage
-
-from the_tale.game.places import storage as places_storage
-from the_tale.game.places import objects as places_objects
-
-from the_tale.game.persons import storage as persons_storage
-from the_tale.game.persons import objects as persons_objects
-
-from the_tale.game import relations as game_relations
-
-from . import relations
-from . import models
+smart_imports.all()
 
 
 class _PreferencesMetaclass(type):

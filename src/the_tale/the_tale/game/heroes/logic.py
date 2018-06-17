@@ -1,41 +1,8 @@
 
-import random
-import datetime
 
-from utg import words as utg_words
+import smart_imports
 
-from django.db import models as django_models
-
-from dext.common.utils import s11n
-
-from tt_logic.beings import relations as beings_relations
-
-from the_tale.game import turn
-from the_tale.game import relations as game_relations
-from the_tale.game import names
-
-from the_tale.game.balance import formulas as f
-from the_tale.game.balance import power
-
-from the_tale.game.actions import container as actions_container
-from the_tale.game.quests import container as quests_container
-
-
-from the_tale.game.artifacts import storage as artifacts_storage
-from the_tale.game.places import storage as places_storage
-
-from the_tale.game.companions import objects as companions_objects
-
-from . import models
-from . import objects
-from . import position
-from . import statistics
-from . import preferences
-from . import relations
-from . import messages
-from . import habilities
-from . import bag
-from . import habits
+smart_imports.all()
 
 
 def live_query():

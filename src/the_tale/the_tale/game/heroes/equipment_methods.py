@@ -1,15 +1,7 @@
 
-import random
+import smart_imports
 
-from the_tale.common.utils.logic import random_value_by_priority
-
-from the_tale.game.balance.power import Power
-from the_tale.game.balance import constants as c
-
-from the_tale.game.heroes import relations
-
-from the_tale.game.artifacts import storage as artifacts_storage
-from the_tale.game.artifacts import relations as artifacts_relations
+smart_imports.all()
 
 
 class EquipmentMethodsMixin(object):
@@ -53,7 +45,7 @@ class EquipmentMethodsMixin(object):
                 if artifact is not None:
 
                     distribution = self.preferences.archetype.power_distribution
-                    min_power, max_power = Power.artifact_power_interval(distribution, self.level) # pylint: disable=W0612
+                    min_power, max_power = power.Power.artifact_power_interval(distribution, self.level) # pylint: disable=W0612
 
                     if artifact.preference_rating(distribution) >= artifacts_objects.Artifact._preference_rating(artifact.rarity, max_power, distribution):
                         continue
@@ -101,8 +93,8 @@ class EquipmentMethodsMixin(object):
 
         artifact = artifacts_storage.artifacts.generate_artifact_from_list(artifact_choices, max(1, self.level + level_delta), rarity_type)
 
-        artifact.power += Power(int(artifact.power.physic * power_bonus),
-                                int(artifact.power.magic * power_bonus))
+        artifact.power += power.Power(int(artifact.power.physic * power_bonus),
+                                      int(artifact.power.magic * power_bonus))
 
         if artifact is None:
             return None, None, None
@@ -153,7 +145,7 @@ class EquipmentMethodsMixin(object):
 
         distribution = self.preferences.archetype.power_distribution
 
-        min_power, max_power = Power.artifact_power_interval(distribution, self.level) # pylint: disable=W0612
+        min_power, max_power = power.Power.artifact_power_interval(distribution, self.level) # pylint: disable=W0612
 
         for slot in choices:
             artifact = self.equipment.get(slot)
@@ -173,7 +165,7 @@ class EquipmentMethodsMixin(object):
         if random.random() < self.safe_artifact_integrity_probability:
             return
 
-        expected_artifact_power = Power.normal_power_to_level(self.level)
+        expected_artifact_power = power.Power.normal_power_to_level(self.level)
 
         for artifact in self.equipment.values():
             delta = c.ARTIFACT_INTEGRITY_DAMAGE_PER_BATTLE * (float(artifact.power.total()) / expected_artifact_power)**2
@@ -211,7 +203,7 @@ class EquipmentMethodsMixin(object):
             else:
                 choices.append((slot, c.NORMAL_SLOT_REPAIR_PRIORITY))
 
-        slot = random_value_by_priority(choices)
+        slot = utils_logic.random_value_by_priority(choices)
 
         artifact = self.equipment.get(slot)
         artifact.repair_it()
@@ -265,8 +257,8 @@ class EquipmentMethodsMixin(object):
 
     def increment_equipment_rarity(self, artifact):
         artifact.rarity = artifacts_relations.RARITY(artifact.rarity.value+1)
-        artifact.power = Power.artifact_power_randomized(distribution=artifact.record.power_type.distribution,
-                                                         level=self.level)
+        artifact.power = power.Power.artifact_power_randomized(distribution=artifact.record.power_type.distribution,
+                                                               level=self.level)
         artifact.max_integrity = int(artifact.rarity.max_integrity * random.uniform(1-c.ARTIFACT_MAX_INTEGRITY_DELTA, 1+c.ARTIFACT_MAX_INTEGRITY_DELTA))
         self.reset_accessors_cache()
 

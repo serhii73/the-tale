@@ -1,14 +1,7 @@
 
-import time
-import collections
+import smart_imports
 
-from the_tale.game.balance import constants as c
-
-from the_tale.game import turn
-
-from . import conf
-
-from the_tale.linguistics.lexicon import keys as linguistics_keys
+smart_imports.all()
 
 
 class MessageSurrogate(object):

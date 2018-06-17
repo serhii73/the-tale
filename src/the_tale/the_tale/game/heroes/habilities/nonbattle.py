@@ -1,20 +1,18 @@
-# coding: utf-8
 
-from the_tale.game.balance import constants as c
-from the_tale.game.balance import formulas as f
+import smart_imports
 
-from .prototypes import AbilityPrototype
-from .relations import ABILITY_TYPE, ABILITY_ACTIVATION_TYPE, ABILITY_AVAILABILITY
-from ..relations import ITEMS_OF_EXPENDITURE
+smart_imports.all()
+
 
 # Денежный способности расчитываем так, чтобы они увеличивали скорость прироста денег по отношению к скорости трат на константу
 MAX_MONEY_ABILITIES_BONUS = 1.5
 
-class CHARISMA(AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+class CHARISMA(prototypes.AbilityPrototype):
+
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Харизматичный'
     normalized_name = NAME
@@ -37,11 +35,11 @@ class CHARISMA(AbilityPrototype):
 
 
 # Для этой способности важно не делать бонус к покупке большим, иначе она будет давать слишком большой бонус в сочетании со всеми другим эффектами увеличения дохода
-class HUCKSTER(AbilityPrototype):
+class HUCKSTER(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Торгаш'
     normalized_name = NAME
@@ -76,11 +74,11 @@ class HUCKSTER(AbilityPrototype):
         return value
 
 
-class DANDY(AbilityPrototype):
+class DANDY(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Щёголь'
     normalized_name = NAME
@@ -93,17 +91,17 @@ class DANDY(AbilityPrototype):
 
     def modify_attribute(self, type_, value):
         if type_.is_ITEMS_OF_EXPENDITURE_PRIORITIES:
-            value[ITEMS_OF_EXPENDITURE.BUYING_ARTIFACT] *= self.priority_multiplier
-            value[ITEMS_OF_EXPENDITURE.SHARPENING_ARTIFACT] *= self.priority_multiplier
-            value[ITEMS_OF_EXPENDITURE.REPAIRING_ARTIFACT] *= self.priority_multiplier
+            value[heroes_relations.ITEMS_OF_EXPENDITURE.BUYING_ARTIFACT] *= self.priority_multiplier
+            value[heroes_relations.ITEMS_OF_EXPENDITURE.SHARPENING_ARTIFACT] *= self.priority_multiplier
+            value[heroes_relations.ITEMS_OF_EXPENDITURE.REPAIRING_ARTIFACT] *= self.priority_multiplier
         return value
 
 
-class BUSINESSMAN(AbilityPrototype):
+class BUSINESSMAN(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Делец'
     normalized_name = NAME
@@ -117,11 +115,11 @@ class BUSINESSMAN(AbilityPrototype):
     def modify_attribute(self, type_, value): return (value + self.probability) if type_.is_GET_ARTIFACT_FOR_QUEST else value
 
 
-class PICKY(AbilityPrototype):
+class PICKY(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Придирчивый'
     normalized_name = NAME
@@ -141,11 +139,11 @@ class PICKY(AbilityPrototype):
 
 
 
-class ETHEREAL_MAGNET(AbilityPrototype):
+class ETHEREAL_MAGNET(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Эфирный магнит'
     normalized_name = NAME
@@ -159,11 +157,11 @@ class ETHEREAL_MAGNET(AbilityPrototype):
     def modify_attribute(self, type_, value): return (value + self.crit_probability) if type_.is_MIGHT_CRIT_CHANCE else value
 
 
-class WANDERER(AbilityPrototype):
+class WANDERER(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Бродяга'
     normalized_name = NAME
@@ -179,11 +177,11 @@ class WANDERER(AbilityPrototype):
     def modify_attribute(self, type_, value): return value*self.speed_multiplier if type_.is_SPEED else value
 
 
-class GIFTED(AbilityPrototype):
+class GIFTED(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Одарённый'
     normalized_name = NAME
@@ -197,11 +195,11 @@ class GIFTED(AbilityPrototype):
     def modify_attribute(self, type_, value): return value*self.experience_multiplier if type_.is_EXPERIENCE else value
 
 
-class DIPLOMATIC(AbilityPrototype):
+class DIPLOMATIC(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     MAXIMUM_MULTIPLIER = 2.0
 
@@ -216,11 +214,11 @@ class DIPLOMATIC(AbilityPrototype):
     def modify_attribute(self, type_, value): return value + self.power_multiplier if type_.is_POWER else value
 
 
-class THRIFTY(AbilityPrototype):
+class THRIFTY(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Запасливый'
     normalized_name = NAME
@@ -235,11 +233,11 @@ class THRIFTY(AbilityPrototype):
         return value + self.max_bag_size_modifier if type_.is_MAX_BAG_SIZE else value
 
 
-class OPEN_MINDED(AbilityPrototype):
+class OPEN_MINDED(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Открытый'
     normalized_name = NAME
@@ -254,11 +252,11 @@ class OPEN_MINDED(AbilityPrototype):
         return value * self.habit_multiplier if type_.is_HABITS_INCREASE else value
 
 
-class SELFISH(AbilityPrototype):
+class SELFISH(prototypes.AbilityPrototype):
 
-    TYPE = ABILITY_TYPE.NONBATTLE
-    ACTIVATION_TYPE = ABILITY_ACTIVATION_TYPE.PASSIVE
-    AVAILABILITY = ABILITY_AVAILABILITY.FOR_PLAYERS
+    TYPE = relations.ABILITY_TYPE.NONBATTLE
+    ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
+    AVAILABILITY = relations.ABILITY_AVAILABILITY.FOR_PLAYERS
 
     NAME = 'Эгоцентричный'
     normalized_name = NAME
@@ -273,6 +271,8 @@ class SELFISH(AbilityPrototype):
         return value * self.multiplier if type_.is_CHARACTER_QUEST_PRIORITY else value
 
 
-ABILITIES = dict( (ability.get_id(), ability)
+ABILITIES = dict((ability.get_id(), ability)
                   for ability in globals().values()
-                  if isinstance(ability, type) and issubclass(ability, AbilityPrototype) and ability != AbilityPrototype)
+                  if (isinstance(ability, type) and
+                      issubclass(ability, prototypes.AbilityPrototype) and
+                      ability != prototypes.AbilityPrototype))

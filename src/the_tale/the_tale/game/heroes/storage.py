@@ -1,9 +1,8 @@
-# coding: utf-8
 
-from utg import words as utg_words
-from utg import relations as utg_relations
+import smart_imports
 
-from the_tale.game.places import storage as places_storage
+smart_imports.all()
+
 
 
 class PositionDescriptionsStorage(object):

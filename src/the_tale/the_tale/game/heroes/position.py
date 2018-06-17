@@ -1,16 +1,7 @@
 
-import math
+import smart_imports
 
-from the_tale.game.balance import constants as c
-
-from the_tale.game.places import storage as places_storage
-from the_tale.game.roads.storage import roads_storage
-
-from the_tale.game.map.storage import map_info_storage
-
-from the_tale.game import turn
-
-from . import storage
+smart_imports.all()
 
 
 class Position(object):
@@ -114,7 +105,7 @@ class Position(object):
         self.place_id = place.id
 
     @property
-    def road(self): return roads_storage.get(self.road_id)
+    def road(self): return roads_storage.roads_storage.get(self.road_id)
 
     def set_road(self, road, percents=0, invert=False):
         self._reset_position()
@@ -188,7 +179,7 @@ class Position(object):
         return int(x), int(y)
 
     def get_terrain(self):
-        map_info = map_info_storage.item
+        map_info = map_storage.map_info_storage.item
         x, y = self.cell_coordinates
         return map_info.terrain[y][x]
 
@@ -196,7 +187,7 @@ class Position(object):
         if self.place:
             return self.place
         else:
-            return map_info_storage.item.get_dominant_place(*self.cell_coordinates)
+            return map_storage.map_info_storage.item.get_dominant_place(*self.cell_coordinates)
 
     def get_nearest_place(self):
         x, y = self.cell_coordinates
@@ -221,16 +212,15 @@ class Position(object):
         return 1.0 - c.WHILD_TRANSPORT_PENALTY - c.TRANSPORT_FROM_PLACE_SIZE_PENALTY * c.PLACE_MAX_SIZE
 
     def get_minumum_distance_to(self, destination):
-        from the_tale.game.roads.storage import waymarks_storage
 
         if self.place:
-            return waymarks_storage.look_for_road(self.place, destination).length
+            return roads_storage.waymarks_storage.look_for_road(self.place, destination).length
 
         if self.is_walking:
             x = self.coordinates_from[0] + (self.coordinates_to[0] - self.coordinates_from[0]) * self.percents
             y = self.coordinates_from[1] + (self.coordinates_to[1] - self.coordinates_from[1]) * self.percents
             nearest_place = self.get_nearest_place()
-            return math.hypot(x-nearest_place.x, y-nearest_place.y) + waymarks_storage.look_for_road(nearest_place, destination).length
+            return math.hypot(x-nearest_place.x, y-nearest_place.y) + roads_storage.waymarks_storage.look_for_road(nearest_place, destination).length
 
         # if on road
         place_from = self.road.point_1
@@ -242,8 +232,8 @@ class Position(object):
         delta_from = self.road.length * self.percents
         delta_to = self.road.length * (1-self.percents)
 
-        return min(waymarks_storage.look_for_road(place_from, destination).length + delta_from,
-                   waymarks_storage.look_for_road(place_to, destination).length + delta_to)
+        return min(roads_storage.waymarks_storage.look_for_road(place_from, destination).length + delta_from,
+                   roads_storage.waymarks_storage.look_for_road(place_to, destination).length + delta_to)
 
 
     def get_position_on_map(self):

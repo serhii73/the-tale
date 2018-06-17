@@ -1,27 +1,7 @@
 
-import time
-import random
-import datetime
+import smart_imports
 
-from django.conf import settings as project_settings
-
-from tt_logic.common import checkers as logic_checkers
-from tt_logic.beings import relations as beings_relations
-
-from the_tale.linguistics.relations import TEMPLATE_RESTRICTION_GROUP
-from the_tale.linguistics.storage import restrictions_storage
-
-from the_tale.game.balance import constants as c
-from the_tale.game.balance import formulas as f
-from the_tale.game.balance import power
-
-from the_tale.game import turn
-from the_tale.game import relations as game_relations
-
-from the_tale.game.map import logic as map_logic
-
-from . import relations
-from . import conf
+smart_imports.all()
 
 
 class LogicAccessorsMixin(object):
@@ -44,7 +24,7 @@ class LogicAccessorsMixin(object):
         if not hasattr(self, '_cached_modifiers'):
             self._cached_modifiers = {}
 
-        if not project_settings.TESTS_RUNNING and modifier in self._cached_modifiers:
+        if not django_settings.TESTS_RUNNING and modifier in self._cached_modifiers:
             return self._cached_modifiers[modifier]
 
         result = self.modify_attribute(modifier, modifier.default())
@@ -692,27 +672,46 @@ class LogicAccessorsMixin(object):
         if '#linguistics_restrictions' in self._cached_modifiers:
             return self._cached_modifiers['#linguistics_restrictions']
 
-        restrictions = (restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.GENDER, self.gender.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.RACE, self.race.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.HABIT_HONOR, self.habit_honor.interval.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.HABIT_PEACEFULNESS, self.habit_peacefulness.interval.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.ARCHETYPE, self.preferences.archetype.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.COMMUNICATION_VERBAL, self.communication_verbal.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.COMMUNICATION_GESTURES, self.communication_gestures.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.COMMUNICATION_TELEPATHIC, self.communication_telepathic.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.INTELLECT_LEVEL, self.intellect_level.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.ACTOR, game_relations.ACTOR.HERO.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.MOB_TYPE, self.mob_type.value).id,
+        restrictions = (linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.GENDER,
+                                                            self.gender.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.RACE,
+                                                            self.race.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.HABIT_HONOR,
+                                                            self.habit_honor.interval.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.HABIT_PEACEFULNESS,
+                                                            self.habit_peacefulness.interval.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.ARCHETYPE,
+                                                            self.preferences.archetype.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.COMMUNICATION_VERBAL,
+                                                            self.communication_verbal.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.COMMUNICATION_GESTURES,
+                                                            self.communication_gestures.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.COMMUNICATION_TELEPATHIC,
+                                                            self.communication_telepathic.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.INTELLECT_LEVEL,
+                                                            self.intellect_level.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.ACTOR,
+                                                            game_relations.ACTOR.HERO.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.MOB_TYPE,
+                                                            self.mob_type.value).id,
 
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.BEING_STRUCTURE, self.structure.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.BEING_MOVEMENT, self.movement.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.BEING_BODY, self.body.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.BEING_SIZE, self.size.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.BEING_ORIENTATION, self.orientation.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.BEING_STRUCTURE,
+                                                            self.structure.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.BEING_MOVEMENT,
+                                                            self.movement.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.BEING_BODY,
+                                                            self.body.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.BEING_SIZE,
+                                                            self.size.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.BEING_ORIENTATION,
+                                                            self.orientation.value).id,
 
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.UPBRINGING, self.upbringing.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.FIRST_DEATH, self.first_death.value).id,
-                        restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.AGE, self.death_age.value).id,)
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.UPBRINGING,
+                                                            self.upbringing.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.FIRST_DEATH,
+                                                            self.first_death.value).id,
+                        linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.AGE,
+                                                            self.death_age.value).id,)
 
         self._cached_modifiers['#linguistics_restrictions'] = restrictions
 
@@ -727,6 +726,7 @@ class LogicAccessorsMixin(object):
 
         return (constants +
                 terrains +
-                (restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.ACTION_TYPE, self.actions.current_action.ui_type.value).id,
-                 restrictions_storage.get_restriction(TEMPLATE_RESTRICTION_GROUP.COMPANION_EXISTENCE,
-                                                      companion_relations.COMPANION_EXISTENCE.HAS.value if self.companion else companion_relations.COMPANION_EXISTENCE.HAS_NO.value).id))
+                (linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.ACTION_TYPE,
+                                                     self.actions.current_action.ui_type.value).id,
+                 linguistics_storage.get_restriction(linguistics_relations.TEMPLATE_RESTRICTION_GROUP.COMPANION_EXISTENCE,
+                                                     companion_relations.COMPANION_EXISTENCE.HAS.value if self.companion else companion_relations.COMPANION_EXISTENCE.HAS_NO.value).id))

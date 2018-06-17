@@ -1,9 +1,7 @@
 
-from tt_protocol.protocol import diary_pb2
+import smart_imports
 
-from the_tale.common.utils import tt_api
-
-from . import conf
+smart_imports.all()
 
 
 def push_message_to_diary(account_id, message, is_premium):
@@ -20,23 +18,23 @@ def push_message_to_diary(account_id, message, is_premium):
                                       message=message.message,
                                       variables=message.get_variables())
 
-    tt_api.async_request(url=conf.heroes_settings.DIARY_PUSH_MESSAGE_URL,
-                         data=diary_pb2.PushMessageRequest(account_id=account_id,
-                                                           message=diary_message,
-                                                           diary_size=diary_size))
+    utils_tt_api.async_request(url=conf.heroes_settings.DIARY_PUSH_MESSAGE_URL,
+                               data=diary_pb2.PushMessageRequest(account_id=account_id,
+                                                                 message=diary_message,
+                                                                 diary_size=diary_size))
 
 
 def diary_version(account_id):
-    answer = tt_api.sync_request(url=conf.heroes_settings.DIARY_VERSION_URL,
-                                 data=diary_pb2.VersionRequest(account_id=account_id),
-                                 AnswerType=diary_pb2.VersionResponse)
+    answer = utils_tt_api.sync_request(url=conf.heroes_settings.DIARY_VERSION_URL,
+                                       data=diary_pb2.VersionRequest(account_id=account_id),
+                                       AnswerType=diary_pb2.VersionResponse)
 
     return answer.version
 
 
 def get_diary(account_id):
-    answer = tt_api.sync_request(url=conf.heroes_settings.DIARY_URL,
-                                 data=diary_pb2.DiaryRequest(account_id=account_id),
-                                 AnswerType=diary_pb2.DiaryResponse)
+    answer = utils_tt_api.sync_request(url=conf.heroes_settings.DIARY_URL,
+                                       data=diary_pb2.DiaryRequest(account_id=account_id),
+                                       AnswerType=diary_pb2.DiaryResponse)
 
     return answer.diary

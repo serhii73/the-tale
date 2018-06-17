@@ -1,13 +1,10 @@
-#coding: utf-8
-import random
 
-from the_tale.game.heroes.habilities.prototypes import AbilityPrototype
-from the_tale.game.heroes.habilities import relations
+import smart_imports
 
-from the_tale.game.balance import constants as c, formulas as f
+smart_imports.all()
 
 
-class HIT(AbilityPrototype):
+class HIT(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -36,7 +33,7 @@ class HIT(AbilityPrototype):
         messenger.add_message('hero_ability_hit_miss', attacker=actor, defender=enemy)
 
 
-class CHARGE(AbilityPrototype):
+class CHARGE(prototypes.AbilityPrototype):
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
     LOGIC_TYPE = relations.ABILITY_LOGIC_TYPE.WITH_CONTACT
@@ -91,7 +88,7 @@ class CHARGE(AbilityPrototype):
     def on_miss(self, messenger, actor, enemy):
         messenger.add_message('hero_ability_charge_miss', attacker=actor, defender=enemy)
 
-class STRONG_HIT(AbilityPrototype):
+class STRONG_HIT(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -120,7 +117,7 @@ class STRONG_HIT(AbilityPrototype):
         messenger.add_message('hero_ability_strong_hit_miss', attacker=actor, defender=enemy)
 
 
-class INSANE_STRIKE(AbilityPrototype):
+class INSANE_STRIKE(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -155,7 +152,7 @@ class INSANE_STRIKE(AbilityPrototype):
         messenger.add_message('hero_ability_insane_strike_miss', attacker=actor, defender=enemy)
 
 
-class MAGIC_MUSHROOM(AbilityPrototype):
+class MAGIC_MUSHROOM(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -180,7 +177,7 @@ class MAGIC_MUSHROOM(AbilityPrototype):
         messenger.add_message('hero_ability_magicmushroom', actor=actor)
 
 
-class SIDESTEP(AbilityPrototype):
+class SIDESTEP(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -208,7 +205,7 @@ class SIDESTEP(AbilityPrototype):
         messenger.add_message('hero_ability__miss', attacker=actor, defender=enemy)
 
 
-class RUN_UP_PUSH(AbilityPrototype):
+class RUN_UP_PUSH(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -247,7 +244,7 @@ class RUN_UP_PUSH(AbilityPrototype):
 
 
 
-class REGENERATION(AbilityPrototype):
+class REGENERATION(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -271,7 +268,7 @@ class REGENERATION(AbilityPrototype):
         messenger.add_message('hero_ability_regeneration', actor=actor, health=applied_health)
 
 
-class CRITICAL_HIT(AbilityPrototype):
+class CRITICAL_HIT(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
@@ -289,7 +286,7 @@ class CRITICAL_HIT(AbilityPrototype):
         actor.context.use_crit_chance(self.critical_chance)
 
 
-class BERSERK(AbilityPrototype):
+class BERSERK(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
@@ -307,7 +304,7 @@ class BERSERK(AbilityPrototype):
         actor.context.use_berserk(1 + self.maximum_bonus * float(actor.max_health - actor.health) / actor.max_health)
 
 
-class NINJA(AbilityPrototype):
+class NINJA(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
@@ -325,7 +322,7 @@ class NINJA(AbilityPrototype):
         enemy.context.use_ninja(self.miss_probability)
 
 
-class FIREBALL(AbilityPrototype):
+class FIREBALL(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -362,7 +359,7 @@ class FIREBALL(AbilityPrototype):
         messenger.add_message('hero_ability_fireball_miss', attacker=actor, defender=enemy)
 
 
-class POISON_CLOUD(AbilityPrototype):
+class POISON_CLOUD(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -390,7 +387,7 @@ class POISON_CLOUD(AbilityPrototype):
         messenger.add_message('hero_ability_poison_cloud', attacker=actor, defender=enemy)
 
 
-class VAMPIRE_STRIKE(AbilityPrototype):
+class VAMPIRE_STRIKE(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -424,7 +421,7 @@ class VAMPIRE_STRIKE(AbilityPrototype):
         messenger.add_message('hero_ability_vampire_strike_miss', attacker=actor, defender=enemy)
 
 
-class FREEZING(AbilityPrototype):
+class FREEZING(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -449,7 +446,7 @@ class FREEZING(AbilityPrototype):
         messenger.add_message('hero_ability_freezing', attacker=actor, defender=enemy)
 
 
-class SPEEDUP(AbilityPrototype):
+class SPEEDUP(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.ACTIVE
@@ -474,7 +471,7 @@ class SPEEDUP(AbilityPrototype):
         messenger.add_message('hero_ability_speedup', attacker=actor, defender=enemy)
 
 
-class LAST_CHANCE(AbilityPrototype):
+class LAST_CHANCE(prototypes.AbilityPrototype):
 
     TYPE = relations.ABILITY_TYPE.BATTLE
     ACTIVATION_TYPE = relations.ABILITY_ACTIVATION_TYPE.PASSIVE
@@ -493,6 +490,8 @@ class LAST_CHANCE(AbilityPrototype):
         actor.context.use_last_chance_probability(self.probability)
 
 
-ABILITIES = dict( (ability.get_id(), ability)
+ABILITIES = dict((ability.get_id(), ability)
                   for ability in globals().values()
-                  if isinstance(ability, type) and issubclass(ability, AbilityPrototype) and ability != AbilityPrototype)
+                  if (isinstance(ability, type) and
+                      issubclass(ability, prototypes.AbilityPrototype) and
+                      ability != prototypes.AbilityPrototype))
