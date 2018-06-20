@@ -1,118 +1,128 @@
 {
-    "variables": {
+    "rules_order": ["rule_predefined_names",
+                    "rule_custom",
+                    "rule_local_modules",
+                    "rule_prefix",
+                    "rule_parent_modules",
+                    "rule_stdlib"],
 
-        "rels": {"module": "rels"},
+    "rules": {"rule_predefined_names": {},
+              "rule_local_modules": {},
+              "rule_parent_modules": {
+                  "suffixes": ["tests"]
+              },
+              "rule_prefix": {
+                  "prefixes": [
+                      {"prefix": "artifacts_", "module": "the_tale.game.artifacts"},
+                      {"prefix": "mobs_", "module": "the_tale.game.mobs"},
+                      {"prefix": "places_", "module": "the_tale.game.places"},
+                      {"prefix": "roads_", "module": "the_tale.game.roads"},
+                      {"prefix": "persons_", "module": "the_tale.game.persons"},
+                      {"prefix": "companions_abilities_", "module": "the_tale.game.companions.abilities"},
+                      {"prefix": "companions_", "module": "the_tale.game.companions"},
+                      {"prefix": "actions_", "module": "the_tale.game.actions"},
+                      {"prefix": "quests_", "module": "the_tale.game.quests"},
+                      {"prefix": "cards_", "module": "the_tale.game.cards"},
+                      {"prefix": "map_", "module": "the_tale.game.map"},
+                      {"prefix": "heroes_", "module": "the_tale.game.heroes"},
+                      {"prefix": "game_", "module": "the_tale.game"},
+                      {"prefix": "accounts_", "module": "the_tale.accounts"},
+                      {"prefix": "clans_", "module": "the_tale.accounts.clans"},
+                      {"prefix": "achievements_", "module": "the_tale.accounts.achievements"},
+                      {"prefix": "bills_", "module": "the_tale.game.bills"},
+                      {"prefix": "linguistics_", "module": "the_tale.linguistics"},
+                      {"prefix": "utils_", "module": "the_tale.common.utils"},
+                      {"prefix": "utg_", "module": "utg"},
+                      {"prefix": "rels_", "module": "rels"},
+                      {"prefix": "questgen_", "module": "questgen"}
+                  ]
+              },
+              "rule_custom": {
+                  "variables": {
+                      "rels": {"module": "rels"},
+                      "tt_calendar": {"module": "tt_calendar"},
+                      "jinja2": {"module": "jinja2"},
 
-        "s11n": {"module": "dext.common.utils.s11n"},
+                      "dext_urls": {"module": "dext.common.utils.urls"},
+                      "dext_forms": {"module": "dext.forms.forms"},
+                      "dext_fields": {"module": "dext.forms.fields"},
+                      "dext_jinja2": {"module": "dext.common.utils.jinja2"},
+                      "dext_cache": {"module": "dext.common.utils.cache"},
+                      "dext_views": {"module": "dext.common.utils.views"},
+                      "dext_old_views": {"module": "dext.views"},
 
-        "amqp_environment": {"module": "the_tale.amqp_environment"},
+                      "django_models": {"module": "django.db.models"},
+                      "django_admin": {"module": "django.contrib.admin"},
+                      "django_settings": {"module": "django.conf", "attribute": "settings"},
+                      "django_forms": {"module": "django.forms"},
+                      "django_postgres_fields": {"module": "django.contrib.postgres.fields"},
+                      "django_reverse": {"module": "django.core.urlresolvers", "attribute": "reverse"},
 
-        "turn": {"module": "the_tale.game.turn"},
-        "names": {"module": "the_tale.game.names"},
+                      "s11n": {"module": "dext.common.utils.s11n"},
 
-        "f": {"module": "the_tale.game.balance.formulas"},
-        "c": {"module": "the_tale.game.balance.constants"},
-        "power": {"module": "the_tale.game.balance.power"},
-        "tt_api_energy": {"module": "the_tale.game.tt_api_energy"},
+                      "amqp_environment": {"module": "the_tale.amqp_environment"},
 
-        "artifacts_storage": {"module": "the_tale.game.artifacts.storage"},
-        "artifacts_objects": {"module": "the_tale.game.artifacts.objects"},
-        "artifacts_relations": {"module": "the_tale.game.artifacts.relations"},
+                      "turn": {"module": "the_tale.game.turn"},
+                      "names": {"module": "the_tale.game.names"},
 
-        "mobs_storage": {"module": "the_tale.game.mobs.storage"},
-        "mobs_objects": {"module": "the_tale.game.mobs.objects"},
+                      "f": {"module": "the_tale.game.balance.formulas"},
+                      "c": {"module": "the_tale.game.balance.constants"},
+                      "power": {"module": "the_tale.game.balance.power"},
+                      "tt_api_energy": {"module": "the_tale.game.tt_api_energy"},
 
-        "places_storage": {"module": "the_tale.game.places.storage"},
-        "places_objects": {"module": "the_tale.game.places.objects"},
+                      "habilities_relations": {"module": "the_tale.game.heroes.habilities.relations"},
 
-        "roads_storage": {"module": "the_tale.game.roads.storage"},
+                      "pm_tt_api": {"module": "the_tale.accounts.personal_messages.tt_api"},
+                      "pm_helpers": {"module": "the_tale.accounts.personal_messages.tests.helpers"},
 
-        "persons_storage": {"module": "the_tale.game.persons.storage"},
-        "persons_objects": {"module": "the_tale.game.persons.objects"},
+                      "linguistics_keys": {"module": "the_tale.linguistics.lexicon.keys"},
 
-        "companions_objects": {"module": "the_tale.game.companions.objects"},
-        "companions_abilities_relations": {"module": "the_tale.game.companions.abilities.relations"},
+                      "PostponedLogic": {"module": "the_tale.common.postponed_tasks.prototypes",
+                                         "attribute": "PostponedLogic"},
+                      "PostponedTask": {"module": "the_tale.common.postponed_tasks.models",
+                                        "attribute": "PostponedTask"},
+                      "PostponedTaskPrototype": {"module": "the_tale.common.postponed_tasks.prototypes",
+                                                 "attribute": "PostponedTaskPrototype"},
+                      "POSTPONED_TASK_LOGIC_RESULT": {"module": "the_tale.common.postponed_tasks.prototypes",
+                                                      "attribute": "POSTPONED_TASK_LOGIC_RESULT"},
+                      "FakePostpondTaskPrototype": {"module": "the_tale.common.postponed_tasks.tests.helpers",
+                                                    "attribute": "FakePostpondTaskPrototype"},
 
-        "actions_container": {"module": "the_tale.game.actions.container"},
-        "actions_relations": {"module": "the_tale.game.actions.relations"},
+                      "BasePrototype": {"module": "the_tale.common.utils.prototypes",
+                                        "attribute": "BasePrototype"},
 
-        "quests_container": {"module": "the_tale.game.quests.container"},
+                      "app_settings": {"module": "dext.common.utils.app_settings"},
 
-        "map_logic": {"module": "the_tale.game.map.logic"},
-        "map_storage": {"module": "the_tale.game.map.storage"},
+                      "beings_relations": {"module": "tt_logic.beings.relations"},
+                      "logic_checkers": {"module": "tt_logic.common.checkers"},
 
-        "cards_types": {"module": "the_tale.game.cards.cards"},
+                      "diary_pb2": {"module": "tt_protocol.protocol.diary_pb2"},
 
-        "habilities_relations": {"module": "the_tale.game.heroes.habilities.relations"},
+                      "FakeActor": {"module": "the_tale.game.actions.fake",
+                                    "attribute": "FakeActor"},
+                      "Damage": {"module": "the_tale.game.actions.contexts.battle",
+                                 "attribute": "Damage"},
 
-        "heroes_relations": {"module": "the_tale.game.heroes.relations"},
+                      "FakeMessenger": {"module": "the_tale.game.heroes.fake",
+                                        "attribute": "FakeMessenger"},
 
-        "game_habits": {"module": "the_tale.game.habits"},
-        "game_logic": {"module": "the_tale.game.logic"},
-        "game_relations": {"module": "the_tale.game.relations"},
-        "game_prototypes": {"module": "the_tale.game.prototypes"},
-        "game_logic_storage": {"module": "the_tale.game.logic_storage"},
+                      "battle_abilities": {"module": "the_tale.game.heroes.habilities.battle"},
+                      "modifiers_abilities": {"module": "the_tale.game.heroes.habilities.modifiers"},
+                      "attributes_abilities": {"module": "the_tale.game.heroes.habilities.attributes"},
+                      "companions_abilities": {"module": "the_tale.game.heroes.habilities.companions"},
+                      "nonbattle_abilities": {"module": "the_tale.game.heroes.habilities.nonbattle"},
 
-        "accounts_logic": {"module": "the_tale.accounts.logic"},
-        "accounts_prototypes": {"module": "the_tale.accounts.prototypes"},
+                      "ABILITIES": {"module": "the_tale.game.heroes.habilities",
+                                    "attribute": "ABILITIES"},
+                      "ABILITY_AVAILABILITY": {"module": "the_tale.game.heroes.habilities",
+                                               "attribute": "ABILITY_AVAILABILITY"},
 
-        "clans_prototypes": {"module": "the_tale.accounts.clans.prototypes"},
+                      "cards_types": {"module": "the_tale.game.cards.cards"},
 
-        "pm_tt_api": {"module": "the_tale.accounts.personal_messages.tt_api"},
+                      "linguistics_helpers": {"module": "the_tale.linguistics.tests.helpers"},
+                      "blogs_helpers": {"module": "the_tale.blogs.tests.helpers"}
 
-        "achievements_storage": {"module": "the_tale.accounts.achievements.storage"},
-        "achievements_relations": {"module": "the_tale.accounts.achievements.relations"},
-
-        "linguistics_forms": {"module": "the_tale.linguistics.forms"},
-        "linguistics_relations": {"module": "the_tale.linguistics.relations"},
-        "linguistics_storage": {"module": "the_tale.linguistics.storage"},
-        "linguistics_keys": {"module": "the_tale.linguistics.lexicon.keys"},
-
-        "utils_exceptions": {"module": "the_tale.common.utils.exceptions"},
-        "utils_logic": {"module": "the_tale.common.utils.logic"},
-        "utils_resources": {"module": "the_tale.common.utils.resources"},
-        "utils_decorators": {"module": "the_tale.common.utils.decorators"},
-        "utils_meta_relations": {"module": "the_tale.common.utils.meta_relations"},
-        "utils_tt_api": {"module": "the_tale.common.utils.tt_api"},
-        "utils_testcase": {"module": "the_tale.common.utils.testcase"},
-
-        "PostponedLogic": {"module": "the_tale.common.postponed_tasks.prototypes",
-                           "attribute": "PostponedLogic"},
-        "PostponedTaskPrototype": {"module": "the_tale.common.postponed_tasks.prototypes",
-                                   "attribute": "PostponedTaskPrototype"},
-        "POSTPONED_TASK_LOGIC_RESULT": {"module": "the_tale.common.postponed_tasks.prototypes",
-                                        "attribute": "POSTPONED_TASK_LOGIC_RESULT"},
-
-        "BasePrototype": {"module": "the_tale.common.utils.prototypes",
-                          "attribute": "BasePrototype"},
-
-        "app_settings": {"module": "dext.common.utils.app_settings"},
-
-        "beings_relations": {"module": "tt_logic.beings.relations"},
-        "logic_checkers": {"module": "tt_logic.common.checkers"},
-
-        "utg_words": {"module": "utg.words"},
-        "utg_relations": {"module": "utg.relations"},
-
-        "questgen_relations": {"module": "questgen.relations"},
-
-        "dext_urls": {"module": "dext.common.utils.urls"},
-        "dext_forms": {"module": "dext.forms.forms"},
-        "dext_fields": {"module": "dext.forms.fields"},
-        "dext_jinja2": {"module": "dext.common.utils.jinja2"},
-        "dext_cache": {"module": "dext.common.utils.cache"},
-        "dext_views": {"module": "dext.common.utils.views"},
-        "dext_old_views": {"module": "dext.views"},
-
-        "rels_django": {"module": "rels.django"},
-
-        "django_models": {"module": "django.db.models"},
-        "django_admin": {"module": "django.contrib.admin"},
-        "django_settings": {"module": "django.conf", "attribute": "settings"},
-        "django_forms": {"module": "django.forms"},
-        "django_postgres_fields": {"module": "django.contrib.postgres.fields"},
-        "django_reverse": {"module": "django.core.urlresolvers", "attribute": "reverse"},
-
-        "diary_pb2": {"module": "tt_protocol.protocol.diary_pb2"}
-    }
+                  }
+              },
+              "rule_stdlib": {}}
 }

@@ -1,26 +1,19 @@
-import time
 
-from the_tale.common.utils import testcase
+import smart_imports
 
-from the_tale.game import tt_api_energy
-
-from the_tale.game.logic import create_test_map
-
-from the_tale.game.logic_storage import LogicStorage
-
-from the_tale.game.places import storage as places_storage
+smart_imports.all()
 
 
-class JobsMethodsTests(testcase.TestCase):
+class JobsMethodsTests(utils_testcase.TestCase):
 
     def setUp(self):
         super(JobsMethodsTests, self).setUp()
 
-        create_test_map()
+        game_logic.create_test_map()
 
         self.account = self.accounts_factory.create_account()
 
-        self.storage = LogicStorage()
+        self.storage = game_logic_storage.LogicStorage()
         self.storage.load_account_data(self.account)
         self.hero = self.storage.accounts_to_heroes[self.account.id]
 

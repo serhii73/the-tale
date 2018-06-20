@@ -1,37 +1,19 @@
 
-import random
+import smart_imports
 
-from unittest import mock
-
-from the_tale.common.utils.testcase import TestCase
-
-from the_tale.game.logic import create_test_map
-
-from the_tale.game.artifacts import logic as artifacts_logic
-from the_tale.game.artifacts import storage as artifacts_storage
-from the_tale.game.artifacts import relations as artifacts_relations
-
-from the_tale.game.balance import constants as c
-from the_tale.game.balance.power import Power
-from the_tale.game.logic_storage import LogicStorage
-
-from the_tale.game import relations as game_relations
-
-from the_tale.game.heroes import relations
-
-from .. import logic
+smart_imports.all()
 
 
-class _HeroEquipmentTestsBase(TestCase):
+class _HeroEquipmentTestsBase(utils_testcase.TestCase):
 
     def setUp(self):
         super(_HeroEquipmentTestsBase, self).setUp()
 
-        create_test_map()
+        game_logic.create_test_map()
 
         account = self.accounts_factory.create_account()
 
-        self.storage = LogicStorage()
+        self.storage = game_logic_storage.LogicStorage()
         self.storage.load_account_data(account)
 
         self.hero = self.storage.accounts_to_heroes[account.id]
@@ -50,26 +32,26 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
             for i in range(self.hero.max_bag_size*2):
                 self.hero.put_loot(artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, self.hero.level, rarity=artifacts_relations.RARITY.NORMAL))
 
-    @mock.patch('the_tale.game.heroes.objects.Hero.bonus_artifact_power', Power(0, 0))
+    @mock.patch('the_tale.game.heroes.objects.Hero.bonus_artifact_power', power.Power(0, 0))
     def test_put_loot__bonus_power_no_bonus(self):
         artifact = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, self.hero.level, rarity=artifacts_relations.RARITY.NORMAL)
-        artifact.power = Power(0, 0)
+        artifact.power = power.Power(0, 0)
         self.hero.put_loot(artifact)
-        self.assertEqual(artifact.power, Power(0, 0))
+        self.assertEqual(artifact.power, power.Power(0, 0))
 
-    @mock.patch('the_tale.game.heroes.objects.Hero.bonus_artifact_power', Power(1, 1))
+    @mock.patch('the_tale.game.heroes.objects.Hero.bonus_artifact_power', power.Power(1, 1))
     def test_put_loot__bonus_power_for_useless(self):
         artifact = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.loot, self.hero.level, rarity=artifacts_relations.RARITY.NORMAL)
-        artifact.power = Power(0, 0)
+        artifact.power = power.Power(0, 0)
         self.hero.put_loot(artifact)
-        self.assertEqual(artifact.power, Power(0, 0))
+        self.assertEqual(artifact.power, power.Power(0, 0))
 
-    @mock.patch('the_tale.game.heroes.objects.Hero.bonus_artifact_power', Power(1, 1))
+    @mock.patch('the_tale.game.heroes.objects.Hero.bonus_artifact_power', power.Power(1, 1))
     def test_put_loot__bonus_power_for_artifact(self):
         artifact = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, self.hero.level, rarity=artifacts_relations.RARITY.NORMAL)
-        artifact.power = Power(0, 0)
+        artifact.power = power.Power(0, 0)
         self.hero.put_loot(artifact)
-        self.assertEqual(artifact.power, Power(1, 1))
+        self.assertEqual(artifact.power, power.Power(1, 1))
 
     def test_sharp_artifact(self):
         old_power = self.hero.power
@@ -81,12 +63,12 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
 
         self.assertTrue(self.hero.power.physic > old_power.physic or
                         self.hero.power.magic > old_power.magic)
-        self.assertTrue(artifact.power == Power(2, 1) or
-                        artifact.power == Power(1, 2))
+        self.assertTrue(artifact.power == power.Power(2, 1) or
+                        artifact.power == power.Power(1, 2))
 
     def test_sharp_artifact_when_all_artifacts_has_max_power(self):
         distribution = self.hero.preferences.archetype.power_distribution
-        min_power, max_power = Power.artifact_power_interval(distribution, self.hero.level)
+        min_power, max_power = power.Power.artifact_power_interval(distribution, self.hero.level)
 
         for artifact in list(self.hero.equipment.equipment.values()):
             artifact.power = max_power.clone()
@@ -101,8 +83,8 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
         self.assertTrue(self.hero.power.physic > old_power.physic or
                         self.hero.power.magic > old_power.magic)
 
-        self.assertTrue(artifact.power == max_power + Power(1, 0) or
-                        artifact.power == max_power + Power(0, 1))
+        self.assertTrue(artifact.power == max_power + power.Power(1, 0) or
+                        artifact.power == max_power + power.Power(0, 1))
 
     @mock.patch('the_tale.game.heroes.objects.Hero.can_upgrade_prefered_slot', True)
     def test_sharp_preferences(self):
@@ -113,7 +95,7 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
 
     def test_sharp_preferences_with_max_power(self):
         distribution = self.hero.preferences.archetype.power_distribution
-        min_power, max_power = Power.artifact_power_interval(distribution, self.hero.level)
+        min_power, max_power = power.Power.artifact_power_interval(distribution, self.hero.level)
 
         self.hero.preferences.set(relations.PREFERENCE_TYPE.EQUIPMENT_SLOT, relations.EQUIPMENT_SLOT.HAND_PRIMARY)
 
@@ -149,7 +131,7 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
 
         # change artifact
         new_artifact = artifacts_storage.artifacts.generate_artifact_from_list([artifact.record], self.hero.level, rarity=artifacts_relations.RARITY.NORMAL)
-        new_artifact.power = artifact.power + Power(1, 1)
+        new_artifact.power = artifact.power + power.Power(1, 1)
         self.hero.bag.put_artifact(new_artifact)
 
         slot, unequipped, equipped = self.hero.get_equip_candidates()
@@ -178,7 +160,7 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
         artifact = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts_for_type([relations.EQUIPMENT_SLOT.HAND_PRIMARY.artifact_type]),
                                                                  self.hero.level,
                                                                  rarity=artifacts_relations.RARITY.NORMAL)
-        artifact.power = old_artifact.power + Power(1, 1)
+        artifact.power = old_artifact.power + power.Power(1, 1)
         self.hero.bag.put_artifact(artifact)
 
         slot, unequipped, equipped = self.hero.get_equip_candidates()
@@ -282,8 +264,8 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
         artifact_1 = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, 1, rarity=artifacts_relations.RARITY.NORMAL)
         artifact_2 = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, 1, rarity=artifacts_relations.RARITY.NORMAL)
 
-        artifact_2.power = Power(1, 1)
-        artifact_1.power = Power(2, 2)
+        artifact_2.power = power.Power(1, 1)
+        artifact_1.power = power.Power(2, 2)
 
         distribution = self.hero.preferences.archetype.power_distribution
 
@@ -305,8 +287,8 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
         artifact_1 = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, self.hero.level, rarity=artifacts_relations.RARITY.NORMAL)
         artifact_2 = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, self.hero.level, rarity=artifacts_relations.RARITY.NORMAL)
 
-        artifact_1.power = Power(200, 200)
-        artifact_2.power = Power(1, 1)
+        artifact_1.power = power.Power(200, 200)
+        artifact_2.power = power.Power(1, 1)
 
         self.hero.bag.put_artifact(artifact_1)
         self.hero.bag.put_artifact(artifact_2)
@@ -506,10 +488,10 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
 
     @mock.patch('the_tale.game.heroes.objects.Hero.safe_artifact_integrity_probability', 0.0)
     def test_damage_integrity__damage_from_artifact_power(self):
-        expected_artifact_power = Power.normal_power_to_level(self.hero.level)
+        expected_artifact_power = power.Power.normal_power_to_level(self.hero.level)
 
         new_artifact = artifacts_storage.artifacts.generate_artifact_from_list(artifacts_storage.artifacts.artifacts, self.hero.level, rarity=artifacts_relations.RARITY.NORMAL)
-        new_artifact.power = Power(expected_artifact_power / 2, expected_artifact_power / 2)
+        new_artifact.power = power.Power(expected_artifact_power / 2, expected_artifact_power / 2)
 
         self.hero.equipment.unequip(new_artifact.type.equipment_slot)
         self.hero.equipment.equip(new_artifact.type.equipment_slot, new_artifact)
@@ -520,7 +502,7 @@ class HeroEquipmentTests(_HeroEquipmentTestsBase):
 
         not_modified_integrity = new_artifact.integrity
 
-        new_artifact.power = Power(expected_artifact_power, expected_artifact_power)
+        new_artifact.power = power.Power(expected_artifact_power, expected_artifact_power)
 
         self.hero.damage_integrity()
 
@@ -637,7 +619,7 @@ class ReceiveArtifactsChoicesTests(_HeroEquipmentTestsBase):
 
     def test_receive_artifacts_slots_choices__better_false(self):
         distribution = self.hero.preferences.archetype.power_distribution
-        min_power, max_power = Power.artifact_power_interval(distribution, self.hero.level) # pylint: disable=W0612
+        min_power, max_power = power.Power.artifact_power_interval(distribution, self.hero.level) # pylint: disable=W0612
 
         for artifact in list(self.hero.equipment.values()):
             artifact.power = max_power
@@ -647,7 +629,7 @@ class ReceiveArtifactsChoicesTests(_HeroEquipmentTestsBase):
 
     def test_receive_artifacts_slots_choices__better_true(self):
         distribution = self.hero.preferences.archetype.power_distribution
-        min_power, max_power = Power.artifact_power_interval(distribution, self.hero.level) # pylint: disable=W0612
+        min_power, max_power = power.Power.artifact_power_interval(distribution, self.hero.level) # pylint: disable=W0612
 
         excluded_slots = []
 
@@ -720,11 +702,11 @@ class ReceiveArtifactsTests(_HeroEquipmentTestsBase):
         self.hero.receive_artifact(equip=True, better=False, prefered_slot=True, prefered_item=True, archetype=True)
 
         distribution = self.hero.preferences.archetype.power_distribution
-        min_power, max_power = Power.artifact_power_interval(distribution, self.hero.level)
+        min_power, max_power = power.Power.artifact_power_interval(distribution, self.hero.level)
 
         for i in range(100):
             old_artifact = self.hero.equipment.get(relations.EQUIPMENT_SLOT.PLATE)
-            old_artifact.power = max_power - Power(1, 1)
+            old_artifact.power = max_power - power.Power(1, 1)
 
             self.hero.receive_artifact(equip=True, better=True, prefered_slot=True, prefered_item=True, archetype=True)
             self.assertTrue(self.hero.equipment.get(relations.EQUIPMENT_SLOT.PLATE).preference_rating(distribution) > old_artifact.preference_rating(distribution))
@@ -771,7 +753,7 @@ class ReceiveArtifactsTests(_HeroEquipmentTestsBase):
 
         for artifact in list(self.hero.equipment.values()):
             artifact.rarity = rarity
-            artifact.power = Power(666666, 666666)
+            artifact.power = power.Power(666666, 666666)
 
         self.hero.reset_accessors_cache()
 

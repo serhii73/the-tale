@@ -1,43 +1,19 @@
 
-import time
+import smart_imports
 
-from unittest import mock
-
-from the_tale.common.utils import testcase
-
-from the_tale.game.logic import create_test_map
-
-from the_tale.game.balance import constants as c
-from the_tale.game.balance import power
-
-from the_tale.game import relations as game_relations
-
-from the_tale.game.logic_storage import LogicStorage
-from the_tale.game.artifacts import relations as artifacts_relations
-
-from the_tale.game.heroes.conf import heroes_settings
-from the_tale.game.heroes import relations
-from the_tale.game.heroes.habilities import nonbattle as nonbattle_abilities
-
-from the_tale.game.companions import storage as companions_storage
-from the_tale.game.companions import logic as companions_logic
-from the_tale.game.companions import relations as companions_relations
-from the_tale.game.companions.abilities import effects as companions_effects
-from the_tale.game.companions.abilities import container as companions_abilities_container
-
-from .. import logic
+smart_imports.all()
 
 
-class HeroLogicAccessorsTestBase(testcase.TestCase):
+class HeroLogicAccessorsTestBase(utils_testcase.TestCase):
 
     def setUp(self):
         super(HeroLogicAccessorsTestBase, self).setUp()
 
-        self.place_1, self.place_2, self.place_3 = create_test_map()
+        self.place_1, self.place_2, self.place_3 = game_logic.create_test_map()
 
         account = self.accounts_factory.create_account()
 
-        self.storage = LogicStorage()
+        self.storage = game_logic_storage.LogicStorage()
         self.storage.load_account_data(account)
         self.hero = self.storage.accounts_to_heroes[account.id]
 
@@ -47,9 +23,9 @@ class HeroLogicAccessorsTest(HeroLogicAccessorsTestBase):
     def check_can_process_turn(self, expected_result, banned=False, bot=False, active=False, premium=False, single=True, idle=False, sinchronized_turn=True):
 
         if sinchronized_turn:
-            turn_number = 6 * heroes_settings.INACTIVE_HERO_DELAY + self.hero.id
+            turn_number = 6 * conf.heroes_settings.INACTIVE_HERO_DELAY + self.hero.id
         else:
-            turn_number = 6 * heroes_settings.INACTIVE_HERO_DELAY + self.hero.id + 1
+            turn_number = 6 * conf.heroes_settings.INACTIVE_HERO_DELAY + self.hero.id + 1
 
         with mock.patch('the_tale.game.heroes.objects.Hero.is_banned', banned), \
              mock.patch('the_tale.game.heroes.objects.Hero.is_bot', bot), \
@@ -337,7 +313,7 @@ class PoliticalPowerTests(HeroLogicAccessorsTestBase):
         with self.check_increased(self.hero.politics_power_multiplier):
             companion_record = companions_logic.create_random_companion_record(name='test-companion',
                                                                                state=companions_relations.STATE.ENABLED,
-                                                                               abilities=companions_abilities_container.Container(start=(companions_effects.ABILITIES.KNOWN,)))
+                                                                               abilities=companions_abilities_container.Container(start=(companions_abilities_effects.ABILITIES.KNOWN,)))
             companion = companions_logic.create_companion(companion_record)
             self.hero.set_companion(companion)
 

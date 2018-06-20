@@ -1,8 +1,8 @@
 
 
+import smart_imports
 
-from the_tale.game.heroes import bag
-from the_tale.game.heroes import relations
+smart_imports.all()
 
 
 class BagTests(utils_testcase.TestCase):

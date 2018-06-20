@@ -1,15 +1,10 @@
 
-import time
-import collections
+import smart_imports
 
-from the_tale.common.utils import testcase
-
-from the_tale.game import turn
-
-from the_tale.game.heroes import messages
+smart_imports.all()
 
 
-class MessagesContainerTest(testcase.TestCase):
+class MessagesContainerTest(utils_testcase.TestCase):
 
     def setUp(self):
         super(MessagesContainerTest, self).setUp()

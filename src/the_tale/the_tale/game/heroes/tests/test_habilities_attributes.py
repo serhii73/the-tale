@@ -1,22 +1,14 @@
 
-from tt_logic.beings import relations as beings_relations
+import smart_imports
 
-from the_tale.common.utils import testcase
-
-from the_tale.game import names
-
-from the_tale.game.logic import create_test_map
-
-from the_tale.game.heroes.habilities import attributes
-
-from .. import logic
+smart_imports.all()
 
 
-class AttributeAbiliesForHeroTest(testcase.TestCase):
+class AttributeAbiliesForHeroTest(utils_testcase.TestCase):
 
     def setUp(self):
         super(AttributeAbiliesForHeroTest, self).setUp()
-        create_test_map()
+        game_logic.create_test_map()
 
         account = self.accounts_factory.create_account()
         self.hero = logic.load_hero(account_id=account.id)
@@ -25,72 +17,71 @@ class AttributeAbiliesForHeroTest(testcase.TestCase):
         pass
 
     def test_extra_slow(self):
-        self.assertTrue(attributes.EXTRA_SLOW().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.EXTRA_SLOW().availability.is_FOR_MONSTERS)
 
     def test_slow(self):
-        self.assertTrue(attributes.SLOW().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.SLOW().availability.is_FOR_MONSTERS)
 
     def test_fast(self):
-        self.assertTrue(attributes.FAST().availability.is_FOR_ALL)
+        self.assertTrue(attributes_abilities.FAST().availability.is_FOR_ALL)
 
         old_initiative = self.hero.initiative
 
-        self.hero.abilities.add(attributes.FAST.get_id())
+        self.hero.abilities.add(attributes_abilities.FAST.get_id())
 
         self.assertTrue(old_initiative < self.hero.initiative)
 
     def test_extra_fast(self):
-        self.assertTrue(attributes.EXTRA_FAST().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.EXTRA_FAST().availability.is_FOR_MONSTERS)
 
     def test_extra_thin(self):
-        self.assertTrue(attributes.EXTRA_THIN().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.EXTRA_THIN().availability.is_FOR_MONSTERS)
 
     def test_thin(self):
-        self.assertTrue(attributes.THIN().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.THIN().availability.is_FOR_MONSTERS)
 
     def test_thick(self):
-        self.assertTrue(attributes.THICK().availability.is_FOR_ALL)
+        self.assertTrue(attributes_abilities.THICK().availability.is_FOR_ALL)
 
         old_max_health = self.hero.max_health
 
-        self.hero.abilities.add(attributes.THICK.get_id())
+        self.hero.abilities.add(attributes_abilities.THICK.get_id())
 
         self.assertTrue(old_max_health < self.hero.max_health)
 
     def test_extra_thick(self):
-        self.assertTrue(attributes.EXTRA_THICK().availability.is_FOR_MONSTERS)
-
+        self.assertTrue(attributes_abilities.EXTRA_THICK().availability.is_FOR_MONSTERS)
 
     def test_extra_weak(self):
-        self.assertTrue(attributes.EXTRA_WEAK().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.EXTRA_WEAK().availability.is_FOR_MONSTERS)
 
     def test_weak(self):
-        self.assertTrue(attributes.WEAK().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.WEAK().availability.is_FOR_MONSTERS)
 
     def test_strong(self):
-        self.assertTrue(attributes.STRONG().availability.is_FOR_ALL)
+        self.assertTrue(attributes_abilities.STRONG().availability.is_FOR_ALL)
 
         old_damage_modifier = self.hero.damage_modifier
 
-        self.hero.abilities.add(attributes.STRONG.get_id())
+        self.hero.abilities.add(attributes_abilities.STRONG.get_id())
 
         self.assertTrue(old_damage_modifier < self.hero.damage_modifier)
 
     def test_extra_strong(self):
-        self.assertTrue(attributes.EXTRA_STRONG().availability.is_FOR_MONSTERS)
+        self.assertTrue(attributes_abilities.EXTRA_STRONG().availability.is_FOR_MONSTERS)
 
 
-class AttributeAbiliesForMobTest(testcase.TestCase):
+class AttributeAbiliesForMobTest(utils_testcase.TestCase):
 
     def setUp(self):
         super(AttributeAbiliesForMobTest, self).setUp()
 
-        create_test_map()
+        game_logic.create_test_map()
 
-        self.mob1 = self.construct_mob_with_abilities(abilities=[attributes.EXTRA_SLOW.get_id(), attributes.EXTRA_THIN.get_id(), attributes.EXTRA_WEAK.get_id()], index=1)
-        self.mob2 = self.construct_mob_with_abilities(abilities=[attributes.SLOW.get_id(), attributes.THIN.get_id(), attributes.WEAK.get_id()], index=2)
-        self.mob3 = self.construct_mob_with_abilities(abilities=[attributes.FAST.get_id(), attributes.THICK.get_id(), attributes.STRONG.get_id()], index=3)
-        self.mob4 = self.construct_mob_with_abilities(abilities=[attributes.EXTRA_FAST.get_id(), attributes.EXTRA_THICK.get_id(), attributes.EXTRA_STRONG.get_id()], index=4)
+        self.mob1 = self.construct_mob_with_abilities(abilities=[attributes_abilities.EXTRA_SLOW.get_id(), attributes_abilities.EXTRA_THIN.get_id(), attributes_abilities.EXTRA_WEAK.get_id()], index=1)
+        self.mob2 = self.construct_mob_with_abilities(abilities=[attributes_abilities.SLOW.get_id(), attributes_abilities.THIN.get_id(), attributes_abilities.WEAK.get_id()], index=2)
+        self.mob3 = self.construct_mob_with_abilities(abilities=[attributes_abilities.FAST.get_id(), attributes_abilities.THICK.get_id(), attributes_abilities.STRONG.get_id()], index=3)
+        self.mob4 = self.construct_mob_with_abilities(abilities=[attributes_abilities.EXTRA_FAST.get_id(), attributes_abilities.EXTRA_THICK.get_id(), attributes_abilities.EXTRA_STRONG.get_id()], index=4)
 
     @staticmethod
     def construct_mob_with_abilities(abilities, index):

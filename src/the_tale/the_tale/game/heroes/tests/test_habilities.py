@@ -1,51 +1,21 @@
 
-import random
+import smart_imports
 
-from unittest import mock
-
-from dext.common.utils import s11n
-
-from django.test import client
-from django.core.urlresolvers import reverse
-
-from the_tale.common.utils.testcase import TestCase
-from the_tale.common.postponed_tasks.prototypes import PostponedTaskPrototype, POSTPONED_TASK_LOGIC_RESULT
-from the_tale.common.postponed_tasks.tests.helpers import FakePostpondTaskPrototype
-
-from the_tale.accounts.logic import login_page_url
-
-from the_tale.game.logic_storage import LogicStorage
-from the_tale.game.logic import create_test_map
-from the_tale.game.balance import constants as c
-
-from the_tale.game.actions.fake import FakeActor
-from the_tale.game.actions.contexts.battle import Damage
-
-from the_tale.game.heroes.fake import FakeMessenger
-from the_tale.game.heroes import bag
-from the_tale.game.artifacts import storage as artifacts_storage
-from the_tale.game.artifacts import relations as artifacts_relations
-
-from the_tale.game.heroes.habilities import battle as battle_abilities
-from the_tale.game.heroes.habilities import modifiers as modifiers_abilities
-from the_tale.game.heroes.habilities import ABILITIES, ABILITY_AVAILABILITY
-from the_tale.game.heroes.postponed_tasks import ChooseHeroAbilityTask, CHOOSE_HERO_ABILITY_STATE
-
-from .. import logic
+smart_imports.all()
 
 
 E = 0.0001
 
 
-class HabilitiesContainerTest(TestCase):
+class HabilitiesContainerTest(utils_testcase.TestCase):
 
     def setUp(self):
         super(HabilitiesContainerTest, self).setUp()
-        self.place_1, self.place_2, self.place_3 = create_test_map()
+        self.place_1, self.place_2, self.place_3 = game_logic.create_test_map()
 
         account = self.accounts_factory.create_account(is_fast=True)
 
-        self.storage = LogicStorage()
+        self.storage = game_logic_storage.LogicStorage()
         self.storage.load_account_data(account)
 
         self.hero = self.storage.accounts_to_heroes[account.id]
@@ -145,7 +115,7 @@ class HabilitiesContainerTest(TestCase):
 
 
 
-class HabilitiesTest(TestCase):
+class HabilitiesTest(utils_testcase.TestCase):
 
     def setUp(self):
         super(HabilitiesTest, self).setUp()
@@ -153,7 +123,7 @@ class HabilitiesTest(TestCase):
         self.attacker = FakeActor(name='attacker')
         self.defender = FakeActor(name='defender')
 
-        create_test_map()
+        game_logic.create_test_map()
 
     def tearDown(self):
         pass
@@ -346,16 +316,16 @@ class HabilitiesTest(TestCase):
 
 
 
-class ChooseAbilityTaskTest(TestCase):
+class ChooseAbilityTaskTest(utils_testcase.TestCase):
 
     def setUp(self):
         super(ChooseAbilityTaskTest, self).setUp()
 
-        create_test_map()
+        game_logic.create_test_map()
 
         account = self.accounts_factory.create_account()
 
-        self.storage = LogicStorage()
+        self.storage = game_logic_storage.LogicStorage()
         self.storage.load_account_data(account)
         self.hero = self.storage.accounts_to_heroes[account.id]
 
@@ -382,34 +352,34 @@ class ChooseAbilityTaskTest(TestCase):
                 return ability_key
 
     def test_create(self):
-        task = ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
         self.assertEqual(task.hero_id, self.hero.id)
-        self.assertEqual(task.state, CHOOSE_HERO_ABILITY_STATE.UNPROCESSED)
+        self.assertEqual(task.state, postponed_tasks.CHOOSE_HERO_ABILITY_STATE.UNPROCESSED)
 
     def test_serialization(self):
-        task = ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
-        self.assertEqual(task.serialize(), ChooseHeroAbilityTask.deserialize(task.serialize()).serialize())
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
+        self.assertEqual(task.serialize(), postponed_tasks.ChooseHeroAbilityTask.deserialize(task.serialize()).serialize())
 
     def test_process_wrong_id(self):
-        task = ChooseHeroAbilityTask(self.hero.id, 'ssadasda')
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, 'ssadasda')
         self.assertEqual(task.process(FakePostpondTaskPrototype(), self.storage), POSTPONED_TASK_LOGIC_RESULT.ERROR)
-        self.assertEqual(task.state, CHOOSE_HERO_ABILITY_STATE.WRONG_ID)
+        self.assertEqual(task.state, postponed_tasks.CHOOSE_HERO_ABILITY_STATE.WRONG_ID)
 
     def test_process_id_not_in_choices(self):
-        task = ChooseHeroAbilityTask(self.hero.id, self.get_unchoosed_ability_id())
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, self.get_unchoosed_ability_id())
         self.assertEqual(task.process(FakePostpondTaskPrototype(), self.storage), POSTPONED_TASK_LOGIC_RESULT.ERROR)
-        self.assertEqual(task.state, CHOOSE_HERO_ABILITY_STATE.NOT_IN_CHOICE_LIST)
+        self.assertEqual(task.state, postponed_tasks.CHOOSE_HERO_ABILITY_STATE.NOT_IN_CHOICE_LIST)
 
     def test_process_not_for_heroes(self):
-        task = ChooseHeroAbilityTask(self.hero.id, self.get_only_for_mobs_ability_id())
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, self.get_only_for_mobs_ability_id())
 
         with mock.patch('the_tale.game.heroes.habilities.AbilitiesPrototype.get_for_choose', lambda x: [ABILITIES[task.ability_id]]):
             self.assertEqual(task.process(FakePostpondTaskPrototype(), self.storage), POSTPONED_TASK_LOGIC_RESULT.ERROR)
 
-        self.assertEqual(task.state, CHOOSE_HERO_ABILITY_STATE.NOT_FOR_PLAYERS)
+        self.assertEqual(task.state, postponed_tasks.CHOOSE_HERO_ABILITY_STATE.NOT_FOR_PLAYERS)
 
     def test_process_already_max_level(self):
-        task = ChooseHeroAbilityTask(self.hero.id, battle_abilities.HIT.get_id())
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, battle_abilities.HIT.get_id())
 
         self.hero.abilities.abilities[battle_abilities.HIT.get_id()].level = battle_abilities.HIT.MAX_LEVEL
         logic.save_hero(self.hero)
@@ -417,38 +387,36 @@ class ChooseAbilityTaskTest(TestCase):
         with mock.patch('the_tale.game.heroes.habilities.AbilitiesPrototype.get_for_choose', lambda x: [ABILITIES[task.ability_id]]):
             with mock.patch('the_tale.game.heroes.habilities.AbilitiesPrototype.can_choose_new_ability', True):
                 self.assertEqual(task.process(FakePostpondTaskPrototype(), self.storage), POSTPONED_TASK_LOGIC_RESULT.ERROR)
-        self.assertEqual(task.state, CHOOSE_HERO_ABILITY_STATE.ALREADY_MAX_LEVEL)
+        self.assertEqual(task.state, postponed_tasks.CHOOSE_HERO_ABILITY_STATE.ALREADY_MAX_LEVEL)
 
     def test_process_success(self):
-        task = ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
         self.assertEqual(task.process(FakePostpondTaskPrototype(), self.storage), POSTPONED_TASK_LOGIC_RESULT.SUCCESS)
-        self.assertEqual(task.state, CHOOSE_HERO_ABILITY_STATE.PROCESSED)
+        self.assertEqual(task.state, postponed_tasks.CHOOSE_HERO_ABILITY_STATE.PROCESSED)
 
     def test_process_no_freee_ability_points(self):
 
-        task = ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
+        task = postponed_tasks.ChooseHeroAbilityTask(self.hero.id, self.get_new_ability_id())
 
         with mock.patch('the_tale.game.heroes.habilities.AbilitiesPrototype.can_choose_new_ability', False):
             self.assertEqual(task.process(FakePostpondTaskPrototype(), self.storage), POSTPONED_TASK_LOGIC_RESULT.ERROR)
 
-        self.assertEqual(task.state, CHOOSE_HERO_ABILITY_STATE.MAXIMUM_ABILITY_POINTS_NUMBER)
+        self.assertEqual(task.state, postponed_tasks.CHOOSE_HERO_ABILITY_STATE.MAXIMUM_ABILITY_POINTS_NUMBER)
 
 
-class HabilitiesViewsTest(TestCase):
+class HabilitiesViewsTest(utils_testcase.TestCase):
 
     def setUp(self):
         super(HabilitiesViewsTest, self).setUp()
 
-        create_test_map()
+        game_logic.create_test_map()
 
         self.account1 = self.accounts_factory.create_account()
         self.account2 = self.accounts_factory.create_account()
 
-        self.storage = LogicStorage()
+        self.storage = game_logic_storage.LogicStorage()
         self.storage.load_account_data(self.account1)
         self.hero = self.storage.accounts_to_heroes[self.account1.id]
-
-        self.client = client.Client()
 
     def get_new_ability_id(self, hero=None):
         if hero is None:
@@ -460,40 +428,40 @@ class HabilitiesViewsTest(TestCase):
 
     def test_choose_ability_dialog(self):
         self.request_login(self.account1.email)
-        response = self.request_html(reverse('game:heroes:choose-ability-dialog', args=[self.hero.id]))
+        response = self.request_html(django_reverse('game:heroes:choose-ability-dialog', args=[self.hero.id]))
         self.assertEqual(response.status_code, 200) #here is real page
 
     def test_choose_ability_dialog_anonymous(self):
-        request_url = reverse('game:heroes:choose-ability-dialog', args=[self.hero.id])
-        self.check_redirect(request_url, login_page_url(request_url))
+        request_url = django_reverse('game:heroes:choose-ability-dialog', args=[self.hero.id])
+        self.check_redirect(request_url, accounts_logic.login_page_url(request_url))
 
     def test_choose_ability_dialog_wrong_user(self):
         self.request_login(self.account2.email)
-        self.check_html_ok(self.request_html(reverse('game:heroes:choose-ability-dialog', args=[self.hero.id])), texts=(('heroes.not_owner', 1),))
+        self.check_html_ok(self.request_html(django_reverse('game:heroes:choose-ability-dialog', args=[self.hero.id])), texts=(('heroes.not_owner', 1),))
 
     def test_choose_ability_request_anonymous(self):
-        response = self.client.post(reverse('game:heroes:choose-ability', args=[self.hero.id]) + '?ability_id=' + self.get_new_ability_id())
+        response = self.client.post(django_reverse('game:heroes:choose-ability', args=[self.hero.id]) + '?ability_id=' + self.get_new_ability_id())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(s11n.from_json(response.content.decode('utf-8'))['status'], 'error')
 
     def test_choose_ability_request_hero_not_exist(self):
         self.request_login(self.account1.email)
-        response = self.client.post(reverse('game:heroes:choose-ability', args=[666]) + '?ability_id=' + self.get_new_ability_id())
+        response = self.client.post(django_reverse('game:heroes:choose-ability', args=[666]) + '?ability_id=' + self.get_new_ability_id())
         self.check_ajax_error(response, 'heroes.hero.not_found')
 
     def test_choose_ability_request_wrong_user(self):
         self.request_login(self.account2.email)
-        response = self.client.post(reverse('game:heroes:choose-ability', args=[self.hero.id]) + '?ability_id=' + self.get_new_ability_id())
+        response = self.client.post(django_reverse('game:heroes:choose-ability', args=[self.hero.id]) + '?ability_id=' + self.get_new_ability_id())
         self.check_ajax_error(response, 'heroes.not_owner')
 
     def test_choose_ability_request_wrong_ability(self):
         self.request_login(self.account1.email)
-        response = self.client.post(reverse('game:heroes:choose-ability', args=[self.hero.id+1]) + '?ability_id=xxxyyy')
+        response = self.client.post(django_reverse('game:heroes:choose-ability', args=[self.hero.id+1]) + '?ability_id=xxxyyy')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(s11n.from_json(response.content.decode('utf-8'))['status'], 'error')
 
     def test_choose_ability_request_ok(self):
         self.request_login(self.account1.email)
-        response = self.client.post(reverse('game:heroes:choose-ability', args=[self.hero.id]) + '?ability_id=' + self.get_new_ability_id())
+        response = self.client.post(django_reverse('game:heroes:choose-ability', args=[self.hero.id]) + '?ability_id=' + self.get_new_ability_id())
         task = PostponedTaskPrototype._db_get_object(0)
         self.check_ajax_processing(response, task.status_url)
